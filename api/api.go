@@ -2,16 +2,20 @@ package api
 
 import (
 	"context"
-	"github.com/amir-the-h/okex"
-	"github.com/amir-the-h/okex/api/rest"
-	"github.com/amir-the-h/okex/api/ws"
+
+	"github.com/HeliTools/okex"
+	"github.com/HeliTools/okex/api/rest"
+	"github.com/HeliTools/okex/api/ws"
 )
 
 // Client is the main api wrapper of okex
 type Client struct {
-	Rest *rest.ClientRest
-	Ws   *ws.ClientWs
-	ctx  context.Context
+	Rest       *rest.ClientRest
+	Ws         *ws.ClientWs
+	ctx        context.Context
+	ApiKey     string
+	SecretKey  string
+	PassPhrase string
 }
 
 // NewClient returns a pointer to a fresh Client
@@ -33,5 +37,5 @@ func NewClient(ctx context.Context, apiKey, secretKey, passphrase string, destin
 	r := rest.NewClient(apiKey, secretKey, passphrase, restURL, destination)
 	c := ws.NewClient(ctx, apiKey, secretKey, passphrase, map[bool]okex.BaseURL{true: wsPriURL, false: wsPubURL})
 
-	return &Client{r, c, ctx}, nil
+	return &Client{r, c, ctx, apiKey, secretKey, passphrase}, nil
 }
